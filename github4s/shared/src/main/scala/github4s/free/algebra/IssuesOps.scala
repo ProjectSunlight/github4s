@@ -62,6 +62,13 @@ final case class EditIssue(
     accessToken: Option[String] = None
 ) extends IssueOp[GHResponse[Issue]]
 
+final case class ListComments(
+    owner: String,
+    repo: String,
+    issue: Int,
+    accessToken: Option[String] = None
+) extends IssueOp[GHResponse[List[Comment]]]
+
 final case class CreateComment(
     owner: String,
     repo: String,
@@ -132,6 +139,14 @@ class IssueOps[F[_]](implicit I: InjectK[IssueOp, F]) {
   ): Free[F, GHResponse[Issue]] =
     Free.inject[IssueOp, F](
       EditIssue(owner, repo, issue, state, title, body, milestone, labels, assignees, accessToken))
+
+  def listComments(
+      owner: String,
+      repo: String,
+      issue: Int,
+      accessToken: Option[String] = None
+  ): Free[F, GHResponse[List[Comment]]] =
+    Free.inject[IssueOp, F](ListComments(owner, repo, issue, accessToken))
 
   def createComment(
       owner: String,

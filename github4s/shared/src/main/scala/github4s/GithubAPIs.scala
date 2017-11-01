@@ -194,6 +194,13 @@ class GHIssues(accessToken: Option[String] = None)(implicit O: IssueOps[GitHub4s
   ): GHIO[GHResponse[Issue]] =
     O.editIssue(owner, repo, issue, state, title, body, milestone, labels, assignees, accessToken)
 
+  def listComments(
+      owner: String,
+      repo: String,
+      id: Int
+  ): GHIO[GHResponse[List[Comment]]] =
+    O.listComments(owner, repo, id, accessToken)
+
   def createComment(
       owner: String,
       repo: String,
@@ -201,6 +208,7 @@ class GHIssues(accessToken: Option[String] = None)(implicit O: IssueOps[GitHub4s
       body: String
   ): GHIO[GHResponse[Comment]] =
     O.createComment(owner, repo, number, body, accessToken)
+
   def editComment(
       owner: String,
       repo: String,

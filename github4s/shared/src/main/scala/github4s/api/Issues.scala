@@ -149,6 +149,26 @@ class Issues[C, M[_]](
 
   /**
    *
+   * List comments
+   *
+   * @param accessToken to identify the authenticated user
+   * @param headers optional user headers to include in the request
+   * @param owner of the repo
+   * @param repo name of the repo
+   * @param number Issue number
+   * @return a GHResponse with the comments
+   */
+  def listComments(
+      accessToken: Option[String] = None,
+      headers: Map[String, String] = Map(),
+      owner: String,
+      repo: String,
+      number: Int): M[GHResponse[List[Comment]]] =
+    httpClient.get[List[Comment]](accessToken, s"repos/$owner/$repo/issues/$number/comments",
+      headers)
+
+  /**
+   *
    * Create a comment
    *
    * @param accessToken to identify the authenticated user

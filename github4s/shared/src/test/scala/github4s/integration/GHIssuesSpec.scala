@@ -18,7 +18,7 @@ package github4s.integration
 
 import github4s.Github
 import github4s.Github._
-import github4s.free.domain.{Issue, SearchIssuesResult}
+import github4s.free.domain.{Comment, Issue, SearchIssuesResult}
 import github4s.implicits._
 import github4s.utils.BaseIntegrationSpec
 
@@ -78,6 +78,17 @@ trait GHIssuesSpec[T] extends BaseIntegrationSpec[T] {
     testFutureIsRight[Issue](response, { r =>
       r.result.state shouldBe validIssueState
       r.result.title shouldBe validIssueTitle
+      r.statusCode shouldBe okStatusCode
+    })
+  }
+
+  "Issues >> ListComments" should "return a list of comments" in {
+    val response = Github(accessToken).issues
+      .listComments(validRepoOwner, validRepoName, validIssueNumber)
+      .execFuture[T](headerUserAgent)
+
+    testFutureIsRight[List[Comment]](response, { r =>
+      r.result.nonEmpty shouldBe true
       r.statusCode shouldBe okStatusCode
     })
   }

@@ -215,6 +215,8 @@ class Interpreters[M[_], C](
               milestone,
               labels,
               assignees)
+          case ListComments(owner, repo, issue, accessToken) ⇒
+            issues.listComments(accessToken, headers, owner, repo, issue)
           case CreateComment(owner, repo, number, body, accessToken) ⇒
             issues.createComment(accessToken, headers, owner, repo, number, body)
           case EditComment(owner, repo, id, body, accessToken) ⇒
