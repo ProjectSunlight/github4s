@@ -226,6 +226,91 @@ class GHIssues(accessToken: Option[String] = None)(implicit O: IssueOps[GitHub4s
 
 }
 
+class GHProjects(accessToken: Option[String] = None)(implicit O: ProjectOps[GitHub4s]) {
+
+  def listRepoProjects(
+      owner: String,
+      repo: String
+  ): GHIO[GHResponse[List[Project]]] =
+    O.listRepoProjects(owner, repo, accessToken)
+
+    def listOrgProjects(
+      org: String
+  ): GHIO[GHResponse[List[Project]]] =
+    O.listOrgProjects(org, accessToken)
+
+  // def searchIssues(
+  //     query: String,
+  //     searchParams: List[SearchParam]
+  // ): GHIO[GHResponse[SearchIssuesResult]] =
+  //   O.searchIssues(query, searchParams, accessToken)
+
+  // def createIssue(
+  //     owner: String,
+  //     repo: String,
+  //     title: String,F
+  //     body: String,
+  //     milestone: Option[Int] = None,
+  //     labels: List[String] = List.empty,
+  //     assignees: List[String] = List.empty
+  // ): GHIO[GHResponse[Issue]] =
+  //   O.createIssue(owner, repo, title, body, milestone, labels, assignees, accessToken)
+
+  // def editIssue(
+  //     owner: String,
+  //     repo: String,
+  //     issue: Int,
+  //     state: String,
+  //     title: String,
+  //     body: String,
+  //     milestone: Option[Int] = None,
+  //     labels: List[String] = List.empty,
+  //     assignees: List[String] = List.empty
+  // ): GHIO[GHResponse[Issue]] =
+  //   O.editIssue(owner, repo, issue, state, title, body, milestone, labels, assignees, accessToken)
+
+  // def listComments(
+  //     owner: String,
+  //     repo: String,
+  //     id: Int
+  // ): GHIO[GHResponse[List[Comment]]] =
+  //   O.listComments(owner, repo, id, accessToken)
+
+  // def createComment(
+  //     owner: String,
+  //     repo: String,
+  //     number: Int,
+  //     body: String
+  // ): GHIO[GHResponse[Comment]] =
+  //   O.createComment(owner, repo, number, body, accessToken)
+
+  // def editComment(
+  //     owner: String,
+  //     repo: String,
+  //     id: Int,
+  //     body: String
+  // ): GHIO[GHResponse[Comment]] =
+  //   O.editComment(owner, repo, id, body, accessToken)
+
+  // def deleteComment(
+  //     owner: String,
+  //     repo: String,
+  //     id: Int
+  // ): GHIO[GHResponse[Unit]] =
+    // O.deleteComment(owner, repo, id, accessToken)
+
+  def listProjectColumns(
+      columnId: Int
+  ): GHIO[GHResponse[List[Column]]] =
+    O.listProjectColumns(columnId, accessToken)
+
+  def listProjectCards(
+      cardId: Int
+  ): GHIO[GHResponse[List[Card]]] =
+    O.listProjectCards(cardId, accessToken)
+
+}
+
 class GHActivities(accessToken: Option[String] = None)(implicit O: ActivityOps[GitHub4s]) {
 
   def setThreadSub(

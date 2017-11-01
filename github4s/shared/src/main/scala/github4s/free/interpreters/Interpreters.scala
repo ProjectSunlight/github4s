@@ -49,7 +49,8 @@ class Interpreters[M[_], C](
     val c05interpreter: COGH05 ~> K = gitDataOpsInterpreter or c04interpreter
     val c06interpreter: COGH06 ~> K = pullRequestOpsInterpreter or c05interpreter
     val c07interpreter: COGH07 ~> K = activityOpsInterpreter or c06interpreter
-    val all: GitHub4s ~> K          = organizationOpsInterpreter or c07interpreter
+    val c08interpreter: COGH08 ~> K = organizationOpsInterpreter or c07interpreter
+    val all: GitHub4s ~> K          = projectOpsInterpreter or c08interpreter
     all
   }
 
@@ -223,6 +224,31 @@ class Interpreters[M[_], C](
             issues.editComment(accessToken, headers, owner, repo, id, body)
           case DeleteComment(owner, repo, id, accessToken) ⇒
             issues.deleteComment(accessToken, headers, owner, repo, id)
+        }
+      }
+    }
+
+
+  /**
+   * Lifts Project Ops to an effect capturing Monad such as Task via natural transformations
+   */
+  def projectOpsInterpreter: ProjectOp ~> K =
+    new (ProjectOp ~> K) {
+
+      val projectMediaType = "application/vnd.github.inertia-preview+json"
+      val projects = new Projects()
+
+      def apply[A](fa: ProjectOp[A]): K[A] = Kleisli[M, Map[String, String], A] { headers =>
+        val customHeaders = headers + ("Accept" -> projectMediaType)
+        fa match {
+          case ListRepoProjects(owner, repo, accessToken) ⇒
+            projects.listRepoProjects(accessToken, customHeaders, owner, repo)
+          case ListOrgProjects(org, accessToken) ⇒
+            projects.listOrgProjects(accessToken, customHeaders, org)
+          case ListProjectColumns(id, accessToken) ⇒
+            projects.listProjectColumns(accessToken, customHeaders, id)
+          case ListProjectCards(id, accessToken) ⇒
+            projects.listProjectCards(accessToken, customHeaders, id)
         }
       }
     }

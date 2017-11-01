@@ -27,5 +27,6 @@ object app {
   type COGH05[A]   = EitherK[GitDataOp, COGH04, A]
   type COGH06[A]   = EitherK[PullRequestOp, COGH05, A]
   type COGH07[A]   = EitherK[ActivityOp, COGH06, A]
-  type GitHub4s[A] = EitherK[OrganizationOp, COGH07, A]
+  type COGH08[A]   = EitherK[OrganizationOp, COGH07, A]
+  type GitHub4s[A] = EitherK[ProjectOp, COGH08, A]
 }
