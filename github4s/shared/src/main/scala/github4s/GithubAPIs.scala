@@ -158,6 +158,13 @@ class GHGists(accessToken: Option[String] = None)(implicit O: GistOps[GitHub4s])
 
 class GHIssues(accessToken: Option[String] = None)(implicit O: IssueOps[GitHub4s]) {
 
+  def getIssue(
+      owner: String,
+      repo: String,
+      number: Int
+  ): GHIO[GHResponse[Issue]] =
+    O.getIssue(owner, repo, number, accessToken)
+
   def listIssues(
       owner: String,
       repo: String

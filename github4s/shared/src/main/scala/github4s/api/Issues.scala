@@ -33,6 +33,24 @@ class Issues[C, M[_]](
   val httpClient = new HttpClient[C, M]
 
   /**
+   * Get information on a particular issue
+   *
+   * @param accessToken to identify the authenticated user
+   * @param headers optional user headers to include in the request
+   * @param owner of the repo
+   * @param repo name of the repo
+   * @param issue number of the issue
+   * @return GHResponse[Issue] repository details
+   */
+  def get(
+      accessToken: Option[String] = None,
+      headers: Map[String, String] = Map(),
+      owner: String,
+      repo: String,
+      number: Int): M[GHResponse[Issue]] =
+    httpClient.get[Issue](accessToken, s"repos/$owner/$repo/issues/$number", headers)
+
+  /**
    * List issues for a repository
    *
    * Note: In the past, pull requests and issues were more closely aligned than they are now.

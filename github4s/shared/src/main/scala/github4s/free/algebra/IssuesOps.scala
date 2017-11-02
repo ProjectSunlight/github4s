@@ -26,6 +26,13 @@ import github4s.free.domain.{Comment, Issue, SearchIssuesResult, SearchParam}
  */
 sealed trait IssueOp[A]
 
+final case class GetIssue(
+    owner: String,
+    repo: String,
+    number: Int,
+    accessToken: Option[String] = None
+) extends IssueOp[GHResponse[Issue]]
+
 final case class ListIssues(
     owner: String,
     repo: String,
@@ -97,6 +104,14 @@ final case class DeleteComment(
  * Coproduct
  */
 class IssueOps[F[_]](implicit I: InjectK[IssueOp, F]) {
+
+  def getIssue(
+      owner: String,
+      repo: String,
+      number: Int,
+      accessToken: Option[String] = None
+  ): Free[F, GHResponse[Issue]] =
+    Free.inject[IssueOp, F](GetIssue(owner, repo, number, accessToken))
 
   def listIssues(
       owner: String,

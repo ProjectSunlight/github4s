@@ -186,6 +186,8 @@ class Interpreters[M[_], C](
 
       def apply[A](fa: IssueOp[A]): K[A] = Kleisli[M, Map[String, String], A] { headers =>
         fa match {
+          case GetIssue(owner, repo, number, accessToken) ⇒
+            issues.get(accessToken, headers, owner, repo, number)
           case ListIssues(owner, repo, accessToken) ⇒
             issues.list(accessToken, headers, owner, repo)
           case SearchIssues(query, searchParams, accessToken) ⇒
